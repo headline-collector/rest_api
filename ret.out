@@ -1,0 +1,18 @@
+/Library/Python/2.7/site-packages/django/contrib/auth/models.py:41: RemovedInDjango19Warning: Model class django.contrib.auth.models.Permission doesn't declare an explicit app_label and either isn't in an application in INSTALLED_APPS or else was imported before its application was loaded. This will no longer be supported in Django 1.9.
+  class Permission(models.Model):
+
+/Library/Python/2.7/site-packages/django/contrib/auth/models.py:98: RemovedInDjango19Warning: Model class django.contrib.auth.models.Group doesn't declare an explicit app_label and either isn't in an application in INSTALLED_APPS or else was imported before its application was loaded. This will no longer be supported in Django 1.9.
+  class Group(models.Model):
+
+/Library/Python/2.7/site-packages/django/contrib/auth/models.py:436: RemovedInDjango19Warning: Model class django.contrib.auth.models.User doesn't declare an explicit app_label and either isn't in an application in INSTALLED_APPS or else was imported before its application was loaded. This will no longer be supported in Django 1.9.
+  class User(AbstractUser):
+
+/Library/Python/2.7/site-packages/django/contrib/auth/models.py:41: RemovedInDjango19Warning: Model class django.contrib.auth.models.Permission doesn't declare an explicit app_label and either isn't in an application in INSTALLED_APPS or else was imported before its application was loaded. This will no longer be supported in Django 1.9.
+  class Permission(models.Model):
+
+/Library/Python/2.7/site-packages/django/contrib/auth/models.py:98: RemovedInDjango19Warning: Model class django.contrib.auth.models.Group doesn't declare an explicit app_label and either isn't in an application in INSTALLED_APPS or else was imported before its application was loaded. This will no longer be supported in Django 1.9.
+  class Group(models.Model):
+
+/Library/Python/2.7/site-packages/django/contrib/auth/models.py:436: RemovedInDjango19Warning: Model class django.contrib.auth.models.User doesn't declare an explicit app_label and either isn't in an application in INSTALLED_APPS or else was imported before its application was loaded. This will no longer be supported in Django 1.9.
+  class User(AbstractUser):
+
