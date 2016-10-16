@@ -313,16 +313,36 @@ class RelationalDynamicQueryRouter(SimpleDynamicQueryRouter):
     logger = LoggerAdaptor("RelationalDynamicQueryRouter", _logger)
 
     def _process_view(self, viewset, methodname, query_key, prefix):
-        if methodname.upper() == 'GET':
-            self._process_get_view(self, viewset, query_key, prefix)
+        if   methodname.upper() == 'GET':
+            self._process_get_view(self, viewset, methodname, query_key, prefix)
         elif methodname.upper() == 'POST':
-            self._process_create_view(self, viewset, query_key, prefix)
+            self._process_create_view(self, viewset, methodname, query_key, prefix)
         elif methodname.upper() == 'PUT':
 
-            self._process_update_view(self, viewset, query_key, prefix)
+            self._process_update_view(self, viewset, methodname, query_key, prefix)
         elif methodname.upper() == 'PATCH':
-            self._proces_partially_update(self, viewset, query_key, prefix)
+            self._proces_partially_update(self, viewset, methodname, query_key, prefix)
+        elif methodname.upper() == 'DELETE':
+            self._process_delete_view(self, viewset, methodname, query_key, prefix)
 
+    def _process_delete_view(self, viewset, methodname, query_key, prefix):
+
+        __code = """
+def {method_name}(self, req,
+                        {query_key}=None,
+                        **kwargs):
+        raise Exception("Not Implemented: {method_name}")
+
+_gen_func_hook = {method_name}
+setattr(viewset, '{method_name}', _gen_func_hook)
+        """
+        viewset._logger = self.logger
+        __code = __code.format(method_name=methodname, query_key=query_key)
+        self.logger.info('_code_gen of %s: %s', viewset.__name__ , __code)
+        try:
+            exec(__code)
+        except Exception as err:
+            raise(err)
 
 
     def _process_create_view(self, viewset, methodname, query_key, prefix):

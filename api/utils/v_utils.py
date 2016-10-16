@@ -16,7 +16,10 @@ def get_args_by_req(req,
 
     # req.[url_method]
     method = req.method
-    _full_args = req.__getattribute__(method)
+    try:
+        _full_args = req.__getattribute__(method)
+    except:
+        _full_args = {}
     if prop_args is None:
         ol = _full_args
     else:

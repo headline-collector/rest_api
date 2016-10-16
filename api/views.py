@@ -296,6 +296,8 @@ class WebSiteViewRouter(NestedViewRouter):
         if len(website) == 0:
             website = WebSite(name=name, url=url, tags=tags)
             website.save()
+        else:
+            website = website[0]
 
         serialized = WebSiteSerializer(website)
         return Response(data=serialized.data)
@@ -305,7 +307,13 @@ class WebSiteViewRouter(NestedViewRouter):
         pass
 
     def delete_website_by_name(self, req, name):
-        pass
+        wb = WebSite.objects.filter(name=name)
+        if len(wb) == 0:
+            return handle_exc(None,
+                              status_code=status.HTTP_400_BAD_REQUEST, details="Not exist!")
+        data = WebSiteSerializer(wb, many=True).data
+        wb.delete()
+        return Response(data=data)
 
     update_website_by_name = get_website_by_name
 
@@ -363,7 +371,7 @@ class HeadlineViewRouter(NestedViewRouter):
     serializer_class = HeadlineSerializer
     serializer = SerializerManager(HeadlineSerializer)
 
-    ordering_fields = ('post_date', 'title', 'digest')
+    ordering_fields = ('post_date', 'title', 'digest', 'score')
 
     search_fields = ('id', 'post_date', 'title', 'digest', 'website_id')
     query_key = 'title'

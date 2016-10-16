@@ -2187,3 +2187,401 @@ Sat, 15, Oct, 2016 19:09:52 [WARNING]:base.py, django.request, in line 170 >>
 Not Found: /
 Sat, 15, Oct, 2016 19:10:06 [WARNING]:base.py, django.request, in line 170 >> 
 Not Found: /
+Sun, 16, Oct, 2016 01:28:23 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/Obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 120, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 116, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 301, in create_website_by_name
+    return Response(data=serialized.data)
+  File "/Library/Python/2.7/site-packages/rest_framework/serializers.py", line 503, in data
+    ret = super(Serializer, self).data
+  File "/Library/Python/2.7/site-packages/rest_framework/serializers.py", line 239, in data
+    self._data = self.to_representation(self.instance)
+  File "/Library/Python/2.7/site-packages/rest_framework/serializers.py", line 463, in to_representation
+    attribute = field.get_attribute(instance)
+  File "/Library/Python/2.7/site-packages/rest_framework/fields.py", line 422, in get_attribute
+    raise type(exc)(msg)
+AttributeError: Got AttributeError when attempting to get a value for field `url` on serializer `WebSiteSerializer`.
+The serializer field might be named incorrectly and not match any attribute or key on the `QuerySet` instance.
+Original exception text was: 'QuerySet' object has no attribute 'url'.
+Sun, 16, Oct, 2016 01:52:18 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/10/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 01:52:38 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/10/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 01:53:11 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 01:53:45 [WARNING]:base.py, django.request, in line 170 >> 
+Not Found: /api/0.1.4/we
+Sun, 16, Oct, 2016 01:55:25 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 01:55:30 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 01:55:35 [WARNING]:base.py, django.request, in line 170 >> 
+Not Found: /api/0.1.4/website/obama/2
+Sun, 16, Oct, 2016 01:55:39 [WARNING]:base.py, django.request, in line 170 >> 
+Not Found: /api/0.1.4/website/obama/2/
+Sun, 16, Oct, 2016 01:57:03 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/v2ex/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 01:57:06 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/v2ex/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 01:58:10 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/v2ex/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 01:59:58 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/v2ex/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 02:04:19 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/v2ex/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 02:04:27 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/v2ex/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 02:04:43 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/v2ex/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 02:07:09 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/v2ex/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 02:09:58 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 02:10:09 [WARNING]:base.py, django.request, in line 170 >> 
+Not Found: /api/0.1.4/website/obama/2
+Sun, 16, Oct, 2016 02:10:13 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 02:10:25 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/Obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 02:13:29 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/v2ex/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 99, in dispatch
+    request = self._init_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 127, in _init_req
+    self.query_params = get_args_by_req(request)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/utils/v_utils.py", line 19, in get_args_by_req
+    _full_args = req.__getattribute__(method)
+AttributeError: 'WSGIRequest' object has no attribute 'DELETE'
+Sun, 16, Oct, 2016 02:19:39 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/Obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 120, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 116, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 312, in delete_website_by_name
+    no, data = wb.delete()
+TypeError: 'NoneType' object is not iterable
+Sun, 16, Oct, 2016 02:21:14 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/v2ex/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 120, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 116, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 312, in delete_website_by_name
+    no, data = wb.delete()
+TypeError: 'NoneType' object is not iterable
+Sun, 16, Oct, 2016 02:22:07 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/Obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 120, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 116, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 301, in create_website_by_name
+    return Response(data=serialized.data)
+  File "/Library/Python/2.7/site-packages/rest_framework/serializers.py", line 674, in data
+    ret = super(ListSerializer, self).data
+  File "/Library/Python/2.7/site-packages/rest_framework/serializers.py", line 239, in data
+    self._data = self.to_representation(self.instance)
+  File "/Library/Python/2.7/site-packages/rest_framework/serializers.py", line 614, in to_representation
+    self.child.to_representation(item) for item in iterable
+TypeError: 'WebSite' object is not iterable
+Sun, 16, Oct, 2016 02:24:28 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/Obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 120, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 116, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 301, in create_website_by_name
+    return Response(data=serialized.data)
+  File "/Library/Python/2.7/site-packages/rest_framework/serializers.py", line 674, in data
+    ret = super(ListSerializer, self).data
+  File "/Library/Python/2.7/site-packages/rest_framework/serializers.py", line 239, in data
+    self._data = self.to_representation(self.instance)
+  File "/Library/Python/2.7/site-packages/rest_framework/serializers.py", line 614, in to_representation
+    self.child.to_representation(item) for item in iterable
+TypeError: 'WebSite' object is not iterable
+Sun, 16, Oct, 2016 02:35:45 [ERROR]:base.py, django.request, in line 256 >> 
+Internal Server Error: /api/0.1.4/website/Obama/
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 120, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 116, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/wangyi/PycharmProjects/hack_Fudan/info_tracker/api/views.py", line 314, in delete_website_by_name
+    no, data = wb.delete()
+TypeError: 'NoneType' object is not iterable
