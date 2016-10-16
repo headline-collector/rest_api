@@ -420,18 +420,25 @@ class CreateRelView(viewsets.ViewSet):
 
     def create(self, req, format=None):
         website_name = req.query_params.get('website_name', '')
-        wb = WebSite.objects.filter(name=website_name)[0]
-        if wb is None:
+        try:
+            wb = WebSite.objects.filter(name=website_name)[0]
+        except:
             wb = WebSite(name=website_name)
             wb.save()
 
         username = req.query_params.get('username', '')
-        user = User.objects.filter(username=username)[0]
+        try:
+            user = User.objects.filter(username=username)[0]
+        except:
+            return handle_exc(None,
+                              status_code=status.HTTP_400_BAD_REQUEST, details="no such user!")
 
         uw_rel = UserWebSite.objects.filter(user_id=user.id, website_id=wb.id)
         if len(uw_rel) is 0:
             uw_rel = UserWebSite(user_id=user.id, website_id=wb.id)
             uw_rel.save()
+        else:
+            uw_rel = uw_rel[0]
 
         serialized = UserWebsiteSerializer(uw_rel)
         return Response(data=serialized.data)
@@ -446,15 +453,17 @@ class CreateRelView(viewsets.ViewSet):
                                   details="rel {id} not exist!".format(id=pk))
         else:
             website_name = req.query_params.get("website_name", '')
-            wb = WebSite.objects.filter(name=website_name)[0]
-            if wb is None:
+            try:
+                wb = WebSite.objects.filter(name=website_name)[0]
+            except:
                 return handle_exc(None,
                                   status_code=status.HTTP_404_NOT_FOUND,
                                   details="website {website_name} not exist!".format(website_name=pk))
 
             username = req.query_params.get('username', '')
-            user = User.objects.filter(username=username)[0]
-            if user is None:
+            try:
+                user = User.objects.filter(username=username)[0]
+            except:
                 return handle_exc(None,
                                   status_code=status.HTTP_404_NOT_FOUND,
                                   details="user {username} not exist!".format(username=username))
