@@ -1,6 +1,8 @@
 __author__ = 'wangyi'
 
 from django.db import models
+from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 from api.models import App
 
 class WebSite(models.Model):
@@ -16,7 +18,8 @@ class WebSite(models.Model):
 
 class User(models.Model):
 
-    auth = models.ForeignKey(App, name='auth_id', db_column="auth_id", related_name='App.id+', to_field='id', verbose_name="auth")
+    auth = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='custom_info',
+                                on_delete=models.CASCADE, verbose_name=_("User")     )
     username = models.CharField(max_length=64, null=False, unique=True)
 
     class Meta:

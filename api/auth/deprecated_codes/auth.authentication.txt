@@ -1,0 +1,112 @@
+__author__ = 'wangyi'
+
+# The codes have been deprecated 1st Nov 2016
+
+class SignatureAuthentication(BaseAuthentication):
+
+    PREFIX = "HTTP_"
+    AUTH_HEAD = "Authorization"
+
+    SIGNATURE_RE = re.compile('signature="(.+?)"')
+    SIGNATURE_HEADERS_RE = re.compile('headers="([\(\)\sa-z0-9-]+?)"')
+
+
+    def parse_header(self, auth_header, request):
+        """
+        sign5 scheme:
+
+        digest: 'Signature algorithm'=xx:
+        Date: xxxx-xx-xx
+
+        :return:
+        or raise exception('authri handler not matched!')
+        with hints header should be added at least
+            Signature: keyId="rsa-key-1",algorithm="rsa-sha256",
+            headers="(request-target) host date digest content-length",
+            signature="Base64(RSA-SHA256(signing string))"
+
+        """
+        param = {}
+        mtch = self.SIGNATURE_HEADERS_RE.search(auth_header)
+        if mtch is None:
+            sign_headers = ['Date']
+        else:
+            sign_headers = mtch.group(1).split()
+
+        # all the parameters passed used for signing url
+        for h in sign_headers:
+            if h == '(request-target)':
+                continue
+            content = request.META.get(self.to_header(h))
+            param[h] = content
+
+        # obtain a sign_url for signature
+        method = request.META.get(self.to_header('request-method'))
+        host = request.META.get(self.to_header('host'))
+        path = request.META.get('PATH_INFO')
+        sign_url_template = "{:method} {:host}:{:path}".format(method=method,host=host,path=path)
+
+        param['URL'] = url_encode(sign_url_template, list(param.items()))
+
+        mtch = self.SIGNATURE_RE.search(auth_header)
+        if mtch is None:
+            raise NotAuthenticated('Signature Missed!')
+        param['signature'] = mtch.group(1)
+        return param
+
+    @handle_err
+    def authenticate(self, request):
+        """
+        get header info
+
+        assign a user to request or raise an error
+        the error should be handled in corresponding
+        middleware, view or decorator
+        the auth will provide different strategies utils
+        """
+        param = {}
+
+        auth_header = request.META.get('Authorization', None)
+
+        # WBY requires a simple get method for authentication.
+        # One should notice that Get method can be recorded by modern browsers hence not safe.
+        authd = get_args(request) if auth_header is None \
+               else self.parse_header(auth_header, request)
+
+        try:
+            param['pk'] = authd['id'] # authd.get('APP_KEY')
+        except KeyError:
+            raise NotAuthenticated('id not found!')
+        try:
+            param['sign_req'] = authd['signature'] # authd.get('signature')
+        except KeyError:
+            raise NotAuthenticated('signature not found!')
+        param['URL'] = authd['request_target'] # authd.get('request_target')
+
+        try:
+            obj = parser.parse(authd.get('Date','')) # authd.get('Date', None)
+            param['t_str'] = '' if obj is None else obj.strftime('%Y-%m-%d') #optional
+        except ValueError:
+            param['t_str'] = authd.get('Date', '')
+
+        developer = self.authenticate_credentials(**param)
+        return developer, param['pk']
+
+    def authenticate_header(self, request):pass
+
+    def authenticate_credentials(self, **credentials):
+        """
+        Signing HTTP Messages draft-cavage-http-signature-signatures-03
+        :param credentials:
+        :return:
+        """
+        try:
+
+            inspect.getcallargs(QueryBackend.authenticate, credentials)
+        except TypeError as err:
+            message = err.message
+            logger.error(message)
+            raise Func_Exception(message)
+
+        return authenticate(**credentials)
+

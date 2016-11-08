@@ -48,8 +48,7 @@ class SerializerManager(object):
                                 fields=self.owner.cols,
                                 **kwargs)
                 repr.is_valid()
-                data = repr.data
-            return data
+            return repr.data
         else:
             return self.cls(objects, **kwargs).data
 
@@ -65,6 +64,33 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
             cls.drop_cols(sign, fields)
             return cls.many_init(*args, **kwargs)
         return super(DynamicFieldsModelSerializer, cls).__new__(cls, *args, **kwargs)
+
+
+    @property
+    def data(self):
+        data = super(DynamicFieldsModelSerializer, self).data
+
+        def walk_json(data, target_key):
+            descendant = [data]
+
+            try:
+                while len(descendant) != 0:
+                    curr = descendant.pop(0)
+                    if curr.get(target_key) is not None:
+                        raise StopIteration
+
+                    for key, val in curr.items():
+                        if isinstance(val, dict):
+                            descendant.append(val)
+            except StopIteration:
+                return curr
+            else:
+                return None
+
+        target = walk_json(data, 'password')
+        if target is not None:
+            target['password'] = "********"
+        return data
 
 
     def __init__(self, *args, **kwargs):
@@ -109,6 +135,7 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
             cls._fields = _cls_fields
             return \
                 cls
+
 
 class UserSerializer(DynamicFieldsModelSerializer):
 

@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import json
 
 from api.models import App
+from django.contrib.auth import get_user_model
 from api.serializer import App_Serializer
 # models ...
 from third_party.models import User, WebSite, Headline, UserWebSite
@@ -11,20 +12,19 @@ from third_party.serializer import WebSiteSerializer, UserSerializer, HeadlineSe
     SerializerManager, UserWebsiteSerializer
 
 from rest_framework import viewsets
+from rest_framework.decorators import api_view, permission_classes, detail_route, list_route
 from rest_framework.viewsets import ViewSetMixin
 from rest_framework.response import Response
 from rest_framework import generics, filters
 from rest_framework import status
 from rest_framework import permissions
-from rest_framework.generics import CreateAPIView
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 
-from django.db import models
 
-import contextlib
-
-from auth.authentication import SignatureAuthentication
 from utils.v_utils import Import_factory, get_args_by_req, to_kls
 from api.auth.exceptions import handle_exc, Cols_Not_Found, BAD_SIGN
+from api.auth.authentication import SignatureAuth
 from rest_framework.request import Request
 
 import logging
@@ -63,24 +63,21 @@ def parse(token, plural=True):
 ## resources layer
 class NestedViewRouter(generics.GenericAPIView):
 
-    _OFFSET = 0
-    _STEP = 1
-    _LIMIT = 5000
-    FILTER_DEF = '' # attributes + optrs
-    PAGINATION_DEF = '10'
-    THROTTLING_LIMIT ='10'
+    authentication_classes = (SignatureAuth, TokenAuthentication, )
+
+    _LIMIT = 1000
+    PAGINATION_DEF = 10
 
     query_set = None
     serializer_class = None
-    # authentication_classes = (SignatureAuthentication, )
+
     logger = LoggerAdaptor("analyse_dynamic_runtime", _logger)
 
     filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
     exclude_from_selector_fields = (u'ordering', u'search', u'offset', u'limit', u'fields',
-                                    u'format', u'app_key', u'signature', u'url', u'date', u'request_target',
+                                    u'format', u'key', u'signature', u'url', u'date', u'request_target',
                                     u'next_url')
-    sign = None
-    cols = None
+    sign, cols = None, None
     query_key = 'pk'
 
     @property
@@ -136,14 +133,7 @@ class NestedViewRouter(generics.GenericAPIView):
 
     def only_cols(self, query_set, fields_string):
         sign, cols = parser.field_parse(fields_string)
-
-        if   sign == '+':
-            query_set = query_set.only(*cols)
-        elif sign == '-':
-            query_set = query_set.defer(*cols)
-        else:
-            raise BAD_SIGN()
-
+        query_set = query_set.only(*cols) if sign == '+' else query_set.defer(*cols)
         self.sign, self.cols = sign, cols
         return query_set
 
@@ -223,16 +213,16 @@ class NestedViewRouter(generics.GenericAPIView):
                             .filter(**selector_args) \
                             .__getitem__(self._slicer)
                           # .order_by('-{query_key}'.format(query_key=self.query_key))\
-        data = self.paginate_queryset(query_set)
-        return data
+        page = self.paginate_queryset(query_set)
+        return page
 
 
     def get_response(self, req, pk=None):
 
         def group(req):
 
-            query_set = self.get_object_plural(req)
-            repr = self.serializer(query_set, many=True)
+            page = self.get_object_plural(req)
+            repr = self.serializer(page, many=True)
             if hasattr(repr, '__len__') and \
                             len(repr) < self.PAGINATION_DEF:
                 return Response(data=repr)
@@ -277,12 +267,14 @@ class WebSiteViewRouter(NestedViewRouter):
     search_fields = ('id', 'name',)
     query_key = 'name'
 
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_websites(self, req):
         return self.get_response(req)
 
     def get_website_by_name(self, req, name):
         return self.get_response(req, name)
+
 
     def create_website_by_name(self, req, name, **param):
         url = req.query_params.get("url", '')
@@ -292,7 +284,7 @@ class WebSiteViewRouter(NestedViewRouter):
             return handle_exc(None,
                               status_code=status.HTTP_400_BAD_REQUEST, details="Not enough parameters")
 
-        website = WebSite.objects.filter(name=name)
+        website = WebSite.objects.get(name=name)
         if len(website) == 0:
             website = WebSite(name=name, url=url, tags=tags)
             website.save()
@@ -300,7 +292,8 @@ class WebSiteViewRouter(NestedViewRouter):
             website = website[0]
 
         serialized = WebSiteSerializer(website)
-        return Response(data=serialized.data)
+        return Response(data=serialized.data, status=status.HTTP_201_CREATED,
+                        headers={'Location': serialized.data.get('url', None)})
 
 
     def update_partially_website_by_name(self, req, name, **param):
@@ -313,7 +306,7 @@ class WebSiteViewRouter(NestedViewRouter):
                               status_code=status.HTTP_400_BAD_REQUEST, details="Not exist!")
         data = WebSiteSerializer(wb, many=True).data
         wb.delete()
-        return Response(data=data)
+        return Response(data=data, status=status.HTTP_204_NO_CONTENT)
 
     update_website_by_name = get_website_by_name
 
@@ -329,6 +322,7 @@ class UserViewRouter(NestedViewRouter):
     search_fields = ('id', 'username')
     query_key = 'username'
 
+    permission_classes = (IsAuthenticated,)
 
     def get_users(self, req):
         return self.get_response(req)
@@ -343,14 +337,15 @@ class UserViewRouter(NestedViewRouter):
             handle_exc(None,
                        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                        details="auth info like password or emails missed")
-
-        app = App.objects.create(username=username,
+        AuthUser = get_user_model()
+        auth_user = AuthUser.objects.create(username=username,
                                         password=password,
                                         email=email)
-        user = User(username=username, auth_id=app)
+        user = User(username=username, auth=auth_user)
         user.save()
         serializer = UserSerializer(user)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED,
+                        headers={'Location': serializer.data.get('url', None)})
 
     def update_user_by_username(self, req, username, **param):
 
@@ -376,11 +371,14 @@ class HeadlineViewRouter(NestedViewRouter):
     search_fields = ('id', 'post_date', 'title', 'digest', 'website_id')
     query_key = 'title'
 
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
     def get_headlines(self, req):
         return self.get_response(req)
 
     def get_headline_by_title(self, req, title):
         return self.get_response(req, title)
+
 
 class UserWebsiteViewRouter(NestedViewRouter):
 
@@ -392,8 +390,12 @@ class UserWebsiteViewRouter(NestedViewRouter):
 
     query_key = 'user_id'
     verbose_key = 'subcribe'
+    pk = 'id'
 
-    def get(self, req, username):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    @detail_route(methods=['GET'], )
+    def username(self, req, username):
         user = User.objects.get(username=username)
         if user is None:
             return handle_exc(None,
@@ -412,11 +414,30 @@ class UserWebsiteViewRouter(NestedViewRouter):
 
         return group(req, username)
 
+    def retrieve(self, req, pk=None):
+        queryset = self.get_queryset()
+        obj = queryset.get(**{self.pk: pk})
+        serialized = self.get_serializer(obj)
+        return Response(serialized.data)
+
+    def list(self, req):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        if page is None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 class CreateRelView(viewsets.ViewSet):
 
     queryset = UserWebSite.objects.all()
     serializer_class = UserWebsiteSerializer
     serializer = SerializerManager(UserWebsiteSerializer)
+
+    permission_classes = (IsAuthenticated, )
 
     def create(self, req, format=None):
         website_name = req.query_params.get('website_name', '')
@@ -424,7 +445,7 @@ class CreateRelView(viewsets.ViewSet):
             wb = WebSite.objects.filter(name=website_name)[0]
         except:
             wb = WebSite(name=website_name)
-            wb.save()
+
 
         username = req.query_params.get('username', '')
         try:
@@ -436,12 +457,14 @@ class CreateRelView(viewsets.ViewSet):
         uw_rel = UserWebSite.objects.filter(user_id=user.id, website_id=wb.id)
         if len(uw_rel) is 0:
             uw_rel = UserWebSite(user_id=user.id, website_id=wb.id)
-            uw_rel.save()
         else:
             uw_rel = uw_rel[0]
 
+        wb.save()
+        uw_rel.save()
         serialized = UserWebsiteSerializer(uw_rel)
-        return Response(data=serialized.data)
+        return Response(data=serialized.data, status=status.HTTP_201_CREATED,
+                        headers={'Location': serialized.data.get('url', None)})
 
     def destroy(self, req, pk=None, format=None):
         if pk is not  None:
@@ -470,4 +493,4 @@ class CreateRelView(viewsets.ViewSet):
 
             uw_rel = UserWebSite.objects.filter(user_id=user.id, website_id=wb.id)
         no, data = uw_rel.delete()
-        return Response(data=data, status_code=status.HTTP_200_OK)
+        return Response(data=data, status=status.HTTP_204_NO_CONTENT)

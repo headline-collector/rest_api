@@ -48,7 +48,6 @@ class BAD_SIGN(REST_API_INPUT_Excepiton):
     status_code = status.SYS_5002_BAD_SIGN
     default_details = "Sign Is Bad!"
 
-
 class Func_Exception(REST_APIException):
 
     status_code = status.SYS_2001_FUNC_METHOD_DOES_NOT_MATCH_THE_PARAMETERS

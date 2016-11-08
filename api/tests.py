@@ -16,8 +16,8 @@ class SignatureTest(SimpleTestCase):
     logger = LoggerAdaptor("TestSignature", _logger)
 
     def test_app_key_secret_gen(self):
-        APP_KEY =  app_key_gen(developer_name)
-        APP_SECRET = app_secret_gen(APP_KEY)
+        APP_KEY =  app_key_gen()
+        APP_SECRET = app_secret_gen()
         self.logger.info("[INFO] test_app_key_secret: %s: %s" % (APP_KEY, APP_SECRET))
 
 
@@ -27,6 +27,7 @@ class AppModelTest(SimpleTestCase):
 
     def test_create_app(self):
         from api.models import App
+        import names
         my_app = App.objects.create('test_app01', '123456', 'test01@gmail.com')
 
 if __name__ == "__main__":

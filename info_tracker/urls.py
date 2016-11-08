@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url, include
 from rest_framework.routers import DefaultRouter
 from api.router import DefaultDynamicQueryRouter as DefaultNestedRouter
 # viewset
-from api.viewsets import WebSiteViewSet, HeadlineViewSet, UserViewSet
+from api.viewsets import WebSiteViewSet, HeadlineViewSet, UserViewSet, UserWebsiteViewSet
 from api.views import AppRegisterView, CreateRelView
 
 from django.conf.urls import patterns, include, url
@@ -14,8 +14,9 @@ nested_router = DefaultNestedRouter(is_method_attached=True)
 
 nested_router.register(r'website', WebSiteViewSet)
 nested_router.register(r'headline', HeadlineViewSet)
-nested_router.register(r'user', UserViewSet)
-router.register(r'subcribe', CreateRelView)
+router.register(r'user/subcribe', CreateRelView)
+nested_router.register(r'user', UserViewSet, 'user')
+router.register(r'subcribe', UserWebsiteViewSet)
 
 VERSION = '0.1.4'
 HOST = '/api'
@@ -31,7 +32,7 @@ urlpatterns = patterns('',
     url(r'^api/{v:}/'.format(v=VERSION), include(nested_router.urls)),
     url(r'^api/{v:}/'.format(v=VERSION), include(router.urls)),
     url(r'^api/{v:}/auth/'.format(v=VERSION), include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^api/{v:}/register'.format(v=VERSION), AppRegisterView.as_view()),
+    url(r'^api/{v:}/app/register/'.format(v=VERSION), AppRegisterView.as_view()),
     url(PREFIX, include('api.url')),
     # url(PREFIX, include('third_party.url')),
 )

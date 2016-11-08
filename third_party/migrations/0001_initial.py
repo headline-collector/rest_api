@@ -2,12 +2,13 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0001_initial'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -30,7 +31,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('username', models.CharField(unique=True, max_length=64)),
-                ('auth_id', models.OneToOneField(related_name='App.id+', db_column=b'auth_id', verbose_name=b'auth', to='api.App')),
+                ('auth', models.OneToOneField(related_name='custom_info', verbose_name='User', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'db_table': 'user',
@@ -41,8 +42,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('importance', models.IntegerField(null=True)),
-                ('user_id', models.ForeignKey(to='third_party.User')),
+                ('user', models.ForeignKey(to='third_party.User')),
             ],
+            options={
+                'db_table': 'user_website',
+            },
         ),
         migrations.CreateModel(
             name='WebSite',
@@ -50,6 +54,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True)),
                 ('url', models.URLField(max_length=256)),
                 ('name', models.CharField(unique=True, max_length=64)),
+                ('tags', models.CharField(max_length=128, null=True)),
             ],
             options={
                 'db_table': 'website',
@@ -57,7 +62,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='userwebsite',
-            name='website_id',
+            name='website',
             field=models.ForeignKey(to='third_party.WebSite'),
         ),
         migrations.AddField(

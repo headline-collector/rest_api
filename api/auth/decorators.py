@@ -2,13 +2,14 @@ __author__ = 'wangyi'
 from rest_framework.exceptions import NotAuthenticated
 import logging
 
+# this __name__ has not been activated in LOGGING config
 logger = logging.getLogger(__name__)
 
-def handle_err(func):
+def handler_authentication(func):
 
     def wrapper(self, request):
         try:
-            developer, app_key = func(self, request)
+            user, token = func(self, request)
         except Exception as err:
             try:
                 detail = err.detail
@@ -19,6 +20,6 @@ def handle_err(func):
                 logger.error(detail)
                 raise NotAuthenticated(detail)
 
-        return developer, app_key
+        return user, token
 
     return wrapper

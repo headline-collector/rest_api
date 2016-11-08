@@ -35,7 +35,8 @@ REL_RE = re.compile(r"{(resource_name)\}")
 
 Router = namedtuple('Router', ['url_regex_tpl', 'mapping', 'name_tpl', 'init_kwargs'])
 NestedRouter = namedtuple('NestedRouter', ['url_regex_tpl', 'mapping', 'name_tpl', 'init_kwargs'])
-
+DyDetailRouter = namedtuple('DyDetailRouter', ['url_regex_tpl', 'name_tpl', 'init_kwargs'])
+DyListRouter = namedtuple('DyListRouter', ['url_regex_tpl', 'name_tpl', 'init_kwargs'])
 
 class SimpleDynamicQueryRouter(SimpleRouter):
 
@@ -43,7 +44,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
     _attached = []
 
     routers = [
-        Router(
+        Router(#list
             url_regex_tpl='{prefix}/',
             mapping = {
                 'get': 'get_{verbose_key}s',
@@ -63,7 +64,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
             name_tpl = '{prefix_abbr}_{verbose_key}',
             init_kwargs = {}
         ),
-        Router(
+        Router(#list
             url_regex_tpl='{prefix}/resources/',
             mapping = {
                 'get': 'get_resources',
@@ -71,7 +72,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
             name_tpl = '{prefix_abbr}_resource(s)',
             init_kwargs = {}
         ),
-        NestedRouter(
+        NestedRouter(#list
             url_regex_tpl='{prefix}/{resource_name}/',
             mapping = {
                 'get': 'get_{resource_name}s_within_{prefix}', # plural = True
@@ -79,7 +80,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
             name_tpl='{prefix_abbr}_{resource_name}_by_name',
             init_kwargs={}
         ),
-        NestedRouter(
+        NestedRouter(#detailed->list
             url_regex_tpl='{prefix}/{look_at}/resources/',
             mapping = {
                 'get': 'get_resources_from_{verbose_key}', # plural = True
@@ -98,7 +99,18 @@ class SimpleDynamicQueryRouter(SimpleRouter):
             },
             name_tpl='{prefix_abbr}_{resource_name}_from_{verbose_key}',
             init_kwargs={}
+        ),
+        DyDetailRouter(
+            url_regex_tpl='{prefix}/{look_at}/',
+            name_tpl = '{method}-detail',
+            init_kwargs={}
+        ),
+        DyListRouter(
+            url_regex_tpl='{prefix}/',
+            name_tpl = '{method}-list',
+            init_kwargs={}
         )
+
     ]
 
     def __init__(self, is_method_attached=True, resource_name=None):
@@ -134,7 +146,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
             if hasattr(nested_view_router, methodname) or self.is_method_attached:
                 bounded_method[http_action] = methodname
         self._attached.append({nested_view_router.queryset.model._meta.object_name: bounded_method})
-        self.logger.info('router._attached: %s', self._attached)
+        # self.logger.info('router._attached: %s', self._attached)
         return bounded_method
 
     def get_verbose_key(self, nested_view_router):
@@ -184,18 +196,21 @@ class SimpleDynamicQueryRouter(SimpleRouter):
         known_actions = flatten([route.mapping.values() for route in self.routes
                                  if isinstance(route, Router)])
         # get methods attached to the view
-        dynamic_ret= []
-        _methods = dir(nested_view_router)
+        detail_router, list_router = [], []
         # if @detail @list decorate the method, we reserve it for updating
-        for methodname in _methods:
+        for methodname in dir(nested_view_router):
             attr = self.get_attr(nested_view_router, methodname)
             http_methods = getattr(attr, "binding_to_methods", None)
+            detail = getattr(attr, 'detail', True)
             if http_methods:
                 # user are using decorator to bind methods
                 # we need to modify these codes
                 if methodname in known_actions:
                     raise ImproperlyConfigured('method {0} has already been in router method mapping')
-                dynamic_ret.append(({http_action:methodname for http_action in http_methods}, methodname))
+                if detail:
+                    detail_router.append(({http_action:methodname for http_action in http_methods}, methodname))
+                else:
+                    list_router.append(({http_action:methodname for http_action in http_methods}, methodname))
 
         def _get_query_router(router):
             return [Router(
@@ -205,15 +220,27 @@ class SimpleDynamicQueryRouter(SimpleRouter):
                 init_kwargs=router.init_kwargs
             )]
 
-        def _get_dynamic_router(router, dynamic_ret):
+        def _get_detail_router(router, detail_ret):
 
             ret = []
-            for _mapping, methodname in dynamic_ret:
+            for _mapping, methodname in detail_ret:
 
-                ret.append(Router(
+                ret.append(DyDetailRouter(
                     url_regex_tpl=router.url_regex_tpl.format(methodname=methodname),
                     mapping=router.mapping.update(_mapping),
-                    name_tpl=router.name_tpl,
+                    name_tpl=router.name_tpl.format(method=methodname),
+                    init_kwargs=router.init_kwargs)
+                )
+            return ret
+
+        def _get_list_router(router, list_ret):
+            ret = []
+            for _mapping, methodname in list_ret:
+
+                ret.append(DyListRouter(
+                    url_regex_tpl=router.url_regex_tpl.format(methodname=methodname),
+                    mapping=router.mapping.update(_mapping),
+                    name_tpl=router.name_tpl.format(method=methodname),
                     init_kwargs=router.init_kwargs)
                 )
             return ret
@@ -222,7 +249,6 @@ class SimpleDynamicQueryRouter(SimpleRouter):
             ret = []
             if names is None:
                 # do implementation here
-
                 pass
             else:
                 for name in names:
@@ -245,12 +271,14 @@ class SimpleDynamicQueryRouter(SimpleRouter):
         for router in self.routers:
             # add method routing to every router
 
-            if isinstance(router, NestedRouter):
+            if   isinstance(router, NestedRouter):
                 ret += _compose_nested_router(router, kwargs.get('resource_name', None))
             elif isinstance(router, Router):
                 ret += _get_query_router(router)
-            else:
-                ret += _get_dynamic_router(router, dynamic_ret)
+            elif isinstance(router, DyDetailRouter):
+                ret += _get_detail_router(router, detail_router)
+            elif isinstance(router, DyListRouter):
+                ret += _get_list_router(router, list_router)
         # self.logger.info('ret: %s', ret)
         return ret
 
@@ -298,7 +326,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
 
 
     def compose_url_regex(self, url_regex_tpl, look_at, prefix, resource_name_re):
-        self.logger.info("look_at: %s", look_at)
+        # self.logger.info("look_at: %s", look_at)
         url_regex = \
             url_regex_tpl.format(prefix=prefix, look_at=look_at, resource_name=resource_name_re) + \
             MTCH_END

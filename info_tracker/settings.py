@@ -73,13 +73,6 @@ CORS_URLS_REGEX = r'/api/.*$'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 CONFIG = {
     'local_test':{
         'ENGINE': 'mysql.connector.django',#'django.db.backends.sqlite3',
@@ -135,8 +128,9 @@ TEMPLATE_LOADERS = (
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'rest_framework.authentication.BasicAuthentication',
-        # 'api.auth.authentication.SignatureAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'api.auth.authentication.SignatureAuth',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
@@ -166,7 +160,8 @@ TEMPLATE_DIRS = (
 DATETIME_INPUT_FORMATS = ['%Y-%m-%d','']
 
 # Default Auth User
-AUTH_USER_MODEL = 'api.App'
+AUTH_USER_MODEL = 'api.User'
+AUTH_APPLICATION = 'api.App'
 # Default Authentication Backends
 AUTHENTICATION_BACKENDS = ('api.auth.backends.QueryBackend',)
 
