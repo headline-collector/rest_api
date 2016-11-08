@@ -27,6 +27,11 @@ We also provide several tools in api to help you setup the project.
 > api.models.App, which establishes a one to one relationship with exsiting auth model
 > api.utils.parser for fields extraction
 
+# Support Passport Implementation
+## workflow
+    After initialing a authentication, server requires signature before issuing an token for successive authentication in case of different behaviors
+    Once Signature successful, the package will grant a token to the existing Auth User model's instance.
+
 # demo project 增删(改)?查
 1. 订阅号:
 	创建一个订阅, 返回订阅object，可以查询其资源位置:
