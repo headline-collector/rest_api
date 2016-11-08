@@ -3,7 +3,7 @@
 Signautre Authentication Package
 ================================
 
-> SDK(sign5) + Django-Rest based Authentication.py and Django based QueryBackend + Generic Dynamic Serializer Manager to support dynamic fields select, and password clean up.
+> SDK(sign5) + Django-Rest based Authentication.py and Django based QueryBackend.py + Generic Dynamic Serializer Manager(third-party.serializer.py) to support dynamic fields select, and password clean up.
 > The Signature Authentication implements stardard proposed in 2015, [draft-cavage-http-signature](https://www.ietf.org/archive/id/draft-cavage-http-signatures-05)
 
 [TOC]
@@ -12,7 +12,7 @@ Signautre Authentication Package
 ![Authorization Scheme](https://github.com/yiakwy/Siganture-Authentication-Package/raw/master/static/Authorization.png)
 
 
-Authentication located in "api.auth".
+### Authentication located in "api.auth".
 > api.auth.authentication : This implements Django-Rest based Signautre Authentication scheme
 > api.auth.backends: This implements Django based authentication backends
 > SDK is used as a client to issue or initiate a signature authentication. 
@@ -23,14 +23,34 @@ Authentication located in "api.auth".
 - unauthorized
 ![unauthorized example](https://github.com/yiakwy/Siganture-Authentication-Package/raw/master/static/unauthorized.png)
 
-We also provide several tools in api to help you setup the project.
+### We also provide several tools in api to help you setup the project.
 > api.models.App, which establishes a one to one relationship with exsiting auth model
 > api.utils.parser for fields extraction
 
+### Generic Serializer Manager Descripter
+
+It fascilitate your development, typically you can use it this way as demonstrated in api.view.py
+```python
+class `ABC`ViewSet(ViewRouter):
+	serializer = SerializerManager(`ABC`Serializer)
+	...
+
+	@list_router(method=['GET'], permission_classes=[IsAuthenticated])
+	def abc(req, verbose_key=None)
+        queryset = self.get_queryset()
+        page = self.paginated_queryset(queryset)
+        data = self.serializer(page, manay=True)
+        if page is None or \
+                len(page) < self.page_slot:
+			return Response(data=data)
+		else:
+			return self.get_paginated_response(data=data)
+```
+
 # Support Passport Implementation
 ## workflow
-    After initialing a authentication, server requires signature before issuing an token for successive authentication in case of different behaviors
-    Once Signature successful, the package will grant a token to the existing Auth User model's instance.
+> After initialing a authentication, server requires signature before issuing an token for successive authentication in case of different behaviors.
+> Once Signature successful, the package will grant a token to the existing Auth User model's instance.
 
 # demo project 增删(改)?查
 1. 订阅号:
