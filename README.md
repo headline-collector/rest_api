@@ -45,8 +45,8 @@ We also provide several tools in api to help you setup the project.
 2. 用户号
 	取得所有用户
 	```javascript
-	GET http://127.0.0.1:8000/api/0.1.4/user
-	````
+	GET http://127.0.0.1:8000/api/0.1.4/user/
+	```
 	取得所有用户，并按用户名排序
 	```javascript
 	GET http://127.0.0.1:8000/api/0.1.4/user?ordering=username
@@ -60,7 +60,7 @@ We also provide several tools in api to help you setup the project.
 	POST http://127.0.0.1:8000/api/0.1.4/user/jack/?password=123&email=yiak.222@gmail.com
 	alias: 
 	POST http://127.0.0.1:8000/api/0.1.4/register?username=gege&password=asfdase&email=jiakechong@jiake.com
-	````
+	```
 3. 网站列表
 	获取网站
 	```javascript
