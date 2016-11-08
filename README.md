@@ -16,29 +16,35 @@ Authentication located in "api.auth".
 > api.auth.authentication : This implements Django-Rest based Signautre Authentication scheme
 > api.auth.backends: This implements Django based authentication backends
 > SDK is used as a client to issue or initiate a signature authentication. 
+
 - authorized
 ![authorized example](https://github.com/yiakwy/Siganture-Authentication-Package/raw/master/static/authorized.png)
+
 - unauthorized
 ![unauthorized example](https://github.com/yiakwy/Siganture-Authentication-Package/raw/master/static/unauthorized.png)
 
 We also provide several tools in api to help you setup the project.
-> api.
+> api.models.App, which establishes a one to one relationship with exsiting auth model
+> api.utils.parser for fields extraction
 
 # demo project 增删(改)?查
 1. 订阅号:
-	创建一个订阅：返回订阅object，可以查询其资源位置
+	创建一个订阅, 返回订阅object，可以查询其资源位置:
 	```javascript
 	POST : http://127.0.0.1:8000/api/0.1.4/subcribe/?username=haha&website_name=HN
 	```
+	
 	销毁一个:
 	```javascript
 	DELETE http://127.0.0.1:8000/api/0.1.4/subcribe/{record_id}/
 	```
-	获取所有订阅：
+	
+	获取所有订阅:
 	```javascript
 	GET http://127.0.0.1:8000/api/0.1.4/subcribe/list/{user_name}/
 	```
-	如果想要把json数据弄出来：请加format=json
+	
+	如果想要把json数据弄出来, 请加format=json:
 	```javascript
 	GET http://127.0.0.1:8000/api/0.1.4/subcribe/list/haha/?format=json
 	```
@@ -47,14 +53,17 @@ We also provide several tools in api to help you setup the project.
 	```javascript
 	GET http://127.0.0.1:8000/api/0.1.4/user/
 	```
+	
 	取得所有用户，并按用户名排序
 	```javascript
 	GET http://127.0.0.1:8000/api/0.1.4/user?ordering=username
 	```
+	
 	取得某个用户号
 	```javascript
 	GET http://127.0.0.1:8000/api/0.1.4/user/{username}/
 	```
+	
 	创建一个用户
 	```javascript
 	POST http://127.0.0.1:8000/api/0.1.4/user/jack/?password=123&email=yiak.222@gmail.com
