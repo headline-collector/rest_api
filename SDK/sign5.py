@@ -34,6 +34,7 @@ def compose_signature(method, path, signed_headers):
         args_processor = lambda (key, val): \
             ': '.join((key.lower(), ', '.join(val) )) if isinstance(val, (list, tuple)) and len(val) > 1 else \
             ': '.join((key.lower(), val[0] if isinstance(val, (list, tuple)) else val))
+
         map_ob = map(args_processor, signed_headers.items())
         return '\n'.join(map_ob)
 
@@ -57,23 +58,27 @@ def client(url, keyId, secret, algorithm, headers=None):
                "Authorization":Authorization.format(key=keyId,
                                                     algorithm=algorithm,
                                                     headers=headers or test_headers,
-                                                    signature=signature)}
+                                                    signature=signature),
+               "Cache-Control": "no-cache",
+               'date': "Tue, 08 Nov 2016 15:58:03 GMT"}
 
+    print("HTTPConnection Host:")
     print(parsed.netloc)
     conn = httplib.HTTPConnection(parsed.netloc)
-    print("request headeres:", headers)
-    conn.request(method="POST",url=url ,headers=headers)
+    print("Request Headers:")
+    print(headers)
+    conn.request(method="GET",url=parsed.path,headers=headers)
     response = conn.getresponse()
-    print("request finished!")
+    print("\n")
     print("%s: %s" %(response.reason, response.status))
     print(response.msg)
 
 
 def test(*args):
     print("begin test... *******\n")
-    url = "http://127.0.0.1:8000/api/0.1.4/user/"#raw_input()
-    keyId = "SNFPDVAAKXUBHHEI"#raw_input()
-    secret = "aca8b32823db20ec542f004e273c12771028b0f4716a957f04c2bcc9cb5c98bd"#raw_input()
+    url = raw_input()#"http://127.0.0.1:8000/api/0.1.4/user/"
+    keyId = raw_input()#"http://127.0.0.1:8000/api/0.1.4/user/"
+    secret = raw_input()#"aca8b32823db20ec542f004e273c12771028b0f4716a957f04c2bcc9cb5c98bd"#
     algorithm = "hmac-sha256"
     client(url, keyId, secret, algorithm)
     print("****** end of test")

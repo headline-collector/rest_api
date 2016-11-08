@@ -13,6 +13,7 @@ from collections import OrderedDict
 from rest_framework import HTTP_HEADER_ENCODING, exceptions
 from rest_framework.authtoken.models import Token
 from .exceptions import *
+from .decorators import handler_authentication
 import logging
 from api.auth.signals import user_signing, user_false_singed, user_signed
 import base64
@@ -120,6 +121,7 @@ class SignatureAuth(BaseAuthentication):
     # this portion can be configured in settings
     www_headers = ('(request-target)', 'host', 'date',)
 
+    @handler_authentication
     def authenticate(self, req):
         """
         This implementation verifies the Signature:
@@ -155,7 +157,11 @@ class SignatureAuth(BaseAuthentication):
         for item in auth_repr.split(TokenTab.ASCII_COMMA):
             try:
                 key, val = item.split(TokenTab.ASCII_EQ, 1)
-                auth_param[key.strip()] = val[1:-1]
+                if val[0] == '\\':
+                    val = val[2:-2]
+                else:
+                    val = val[1:-1]
+                auth_param[key.strip()] = val
             except Exception as e:
                 raise(e)
 

@@ -1,5 +1,5 @@
 ![logo](https://github.com/yiakwy/Siganture-Authentication-Package/raw/master/static/logo.png)
--------------------------
+----------------------------------------------------------------------------------------------
 Signautre Authentication Package
 ================================
 
@@ -9,7 +9,20 @@ Signautre Authentication Package
 [TOC]
 
 # Usage
-[Authorization Scheme](https://github.com/yiakwy/Siganture-Authentication-Package/blob/master/static/Authorization.png)
+![Authorization Scheme](https://github.com/yiakwy/Siganture-Authentication-Package/raw/master/static/Authorization.png)
+
+
+Authentication located in "api.auth".
+> api.auth.authentication : This implements Django-Rest based Signautre Authentication scheme
+> api.auth.backends: This implements Django based authentication backends
+> SDK is used as a client to issue or initiate a signature authentication. 
+- authorized
+![authorized example](https://github.com/yiakwy/Siganture-Authentication-Package/raw/master/static/authorized.png)
+- unauthorized
+![unauthorized example](https://github.com/yiakwy/Siganture-Authentication-Package/raw/master/static/unauthorized.png)
+
+We also provide several tools in api to help you setup the project.
+> api.
 
 # demo project 增删(改)?查
 1. 订阅号:
