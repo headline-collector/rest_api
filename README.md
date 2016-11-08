@@ -1,8 +1,7 @@
-![mahua](/static/logo.jpg)
+![logo](https://github.com/yiakwy/Siganture-Authentication-Package/raw/master/static/logo.png)
 -------------------------
 Signautre Authentication Package
 ================================
-@(package)|demo project|django restful api|
 
 > SDK(sign5) + Django-Rest based Authentication.py and Django based QueryBackend + Generic Dynamic Serializer Manager to support dynamic fields select, and password clean up.
 > The Signature Authentication implements stardard proposed in 2015, [draft-cavage-http-signature](https://www.ietf.org/archive/id/draft-cavage-http-signatures-05)
@@ -10,10 +9,10 @@ Signautre Authentication Package
 [TOC]
 
 # Usage
+[Authorization Scheme](https://github.com/yiakwy/Siganture-Authentication-Package/blob/master/static/Authorization.png)
 
-
-# demo project 增删改查
-(1) 订阅号:
+# demo project 增删(改)?查
+1. 订阅号:
 创建一个订阅：返回订阅object，可以查询其资源位置
 ```javascript
 POST : http://127.0.0.1:8000/api/0.1.4/subcribe/?username=haha&website_name=HN
@@ -30,7 +29,7 @@ GET http://127.0.0.1:8000/api/0.1.4/subcribe/list/{user_name}/
 ```javascript
 GET http://127.0.0.1:8000/api/0.1.4/subcribe/list/haha/?format=json
 ```
-(2) 用户号
+2. 用户号
 取得所有用户
 ```javascript
 GET http://127.0.0.1:8000/api/0.1.4/user
@@ -49,7 +48,7 @@ POST http://127.0.0.1:8000/api/0.1.4/user/jack/?password=123&email=yiak.222@gmai
 alias: 
 POST http://127.0.0.1:8000/api/0.1.4/register?username=gege&password=asfdase&email=jiakechong@jiake.com
 ````
-(3) 网站列表
+3. 网站列表
 获取网站
 ```javascript
 GET http://127.0.0.1:8000/api/0.1.4/website/
