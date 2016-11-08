@@ -27,11 +27,12 @@ class QueryBackend(object):
 
     PK = 'key'
 
-    def get_app(self, _pk):
+    def get_user(self, _pk):
         Application = config_applicatoin()
         try:
             app = Application.objects.select_related().get(**{self.PK: _pk})
-            return app
+            self.app = app
+            return app.user
         except Application.DostNotExist:
             return AnonymousUser()
 
@@ -54,9 +55,10 @@ class QueryBackend(object):
             return True
 
     def check_user(self, _pk=None, sign_req=None, signature_string=None, algorithm=None):
-        app = self.get_app(_pk)
-        user = app.user
-        app_secret = app.secret.encode("ascii")#user.app_secret.encode("ascii")
+        user = self.get_user(_pk)
+        if isinstance(user, AnonymousUser):
+            return None
+        app_secret = self.app.secret.encode("ascii")#user.app_secret.encode("ascii")
 
         sign_srv = app_secret_coder(app_secret, signature_string.encode("ascii"))
 
