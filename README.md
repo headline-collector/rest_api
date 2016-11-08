@@ -1,11 +1,30 @@
-RESTFUL 增删改查
+![mahua](static/logo.jpg)
+-------------------------
+Signautre Authentication Package
+================================
+@(package)|demo project|django restful api|
 
-(1) 订阅号
-创建一个订阅：返回订阅object，可以查询其资源位置
+> SDK(sign5) + Django-Rest based Authentication.py and Django based QueryBackend + Generic Dynamic Serializer Manager to support dynamic fields select, and password clean up.
+> The Signature Authentication implements stardard proposed in 2015, [draft-cavage-http-signature](https://www.ietf.org/archive/id/draft-cavage-http-signatures-05)
+
+[TOC]
+
+# Usage
+
+
+RESTFUL 增删改查
+================
+* (1) 订阅号:
+  *创建一个订阅：返回订阅object，可以查询其资源位置
+```javascript
 POST : http://127.0.0.1:8000/api/0.1.4/subcribe/?username=haha&website_name=HN
-销毁一个：
+```
+  *销毁一个:
+```javascript
 DELETE http://127.0.0.1:8000/api/0.1.4/subcribe/{record_id}/
-获取所有订阅：
+```
+  *获取所有订阅：
+```javascript
 GET http://127.0.0.1:8000/api/0.1.4/subcribe/list/{user_name}/
 
 [
@@ -70,12 +89,13 @@ GET http://127.0.0.1:8000/api/0.1.4/subcribe/list/{user_name}/
         }
     }
 ]
+```
 
 如果想要把json数据弄出来：请加format=json
-GET http://127.0.0.1:8000/api/0.1.4/subcribe/list/haha/?format=json
-
+  *GET http://127.0.0.1:8000/api/0.1.4/subcribe/list/haha/?format=json
+```javascript
 [{"id":3,"importance":null,"user":{"id":2,"username":"haha","auth_id":{"id":1,"created_at":1476515594,"app_key":"YAK151320160713293917828","app_name":"yak","username":"haha","auth_type":null,"app_secret":"716c8c4e1ae2b1f66bf9ff677b99a71038512199831e11cc330736f54b3bb12e","callback_url":null,"is_available":false,"email":"yiak.wy@gmail.com","latest_update_time":null,"token":"","expire_date":null,"password":"163512108403620369"}},"website":{"id":4,"url":"https://github.com/trending","name":"github","tags":"developer"}},{"id":4,"importance":null,"user":{"id":2,"username":"haha","auth_id":{"id":1,"created_at":1476515594,"app_key":"YAK151320160713293917828","app_name":"yak","username":"haha","auth_type":null,"app_secret":"716c8c4e1ae2b1f66bf9ff677b99a71038512199831e11cc330736f54b3bb12e","callback_url":null,"is_available":false,"email":"yiak.wy@gmail.com","latest_update_time":null,"token":"","expire_date":null,"password":"163512108403620369"}},"website":{"id":1,"url":"https://news.ycombinator","name":"HN","tags":"developer"}}]
-
+```
 (2) 用户号
 取得所有用户
 GET http://127.0.0.1:8000/api/0.1.4/user
